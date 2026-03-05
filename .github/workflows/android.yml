@@ -19,15 +19,25 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential ccache git zip unzip
+          sudo apt-get install -y build-essential ccache git zip unzip openjdk-17-jdk
+      
+      - name: Install Python dependencies
+        run: |
+          pip install buildozer==1.5.0
       
       - name: Build APK
         run: |
-          pip install buildozer
           buildozer android debug
+        env:
+          BUILDOZER_WARN_ON_ROOT: 0
       
       - name: Upload APK
         uses: actions/upload-artifact@v4
